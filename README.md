@@ -1,4 +1,4 @@
-N3-docker-nginx
+Docker OpenResty for N3
 ===============
 
 Dockered Nginx
