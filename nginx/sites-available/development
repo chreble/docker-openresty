@@ -1,0 +1,38 @@
+server {
+  listen [::]:443 ssl spdy;
+  listen 443 ssl spdy;
+
+  server_name ~^(?<website>[\w\d]+)\-(?<branch>[\w\d\-_]+)\-a\.dev\.nexwai\.pl$;
+
+  # access & errors logs
+  access_log off;
+  error_log /var/log/nginx/dev-bbl.error.log;
+
+  ssl on;
+  ssl_certificate /etc/nginx/certs/nexwai.crt;
+  ssl_certificate_key /etc/nginx/certs/nexwai.key;
+
+  if (!-d /var/www/environments/$branch/$website) {
+    rewrite . http://oops.testing.nexwai.pl redirect;
+  }
+
+  include n3_base;
+  root /var/www/environments/$branch/$website;
+
+  # Handle the execution of .php files.
+  location ~ .php$ {
+    if (!-e $request_filename) {
+      rewrite / /index.php last;
+    }
+    expires off;
+
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_param SCRIPT_FILENAME $request_filename;
+    fastcgi_param MAGE_IS_DEVELOPER_MODE 1;
+    fastcgi_param MAGE_RUN_CODE $website;
+    fastcgi_param MAGE_RUN_TYPE website;
+    fastcgi_param APPLICATION_ENV development;
+
+    include fastcgi_params;
+  }
+}

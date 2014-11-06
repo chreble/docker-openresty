@@ -66,6 +66,7 @@ RUN (wget -qO - https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_
         --without-mail_pop3_module \
         --without-mail_imap_module \
         --without-mail_smtp_module \
+        --without-ngx_devel_kit_module \
         --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION} \
     && make \
     && make install
