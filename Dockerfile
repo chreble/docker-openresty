@@ -10,6 +10,10 @@ ENV PAGESPEED_VERSION 1.9.32.2-beta
 ENV PAGESPEED_PSOL_VERSION 1.9.32.2
 ENV OPENSSL_VERSION 1.0.1j
 
+# Default environment
+# Can be overridden at runtime using -e ENVIRONMENT=...
+ENV ENVIRONMENT development
+
 # Fix locales
 RUN locale-gen en_US.UTF-8 \
     && dpkg-reconfigure locales
@@ -66,7 +70,7 @@ RUN (wget -qO - https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_
         --without-mail_pop3_module \
         --without-mail_imap_module \
         --without-mail_smtp_module \
-        --without-ngx_devel_kit_module \
+        --without-http_encrypted_session_module \
         --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION} \
     && make \
     && make install
@@ -90,11 +94,11 @@ RUN mkdir /var/ngx_pagespeed_cache \
 # Copy our custom configuration
 ADD nginx /etc/nginx/
 
-# Enable the proper environment
-ln -s /etc/nginx/sites-available/$(ENVIRONMENT) /etc/nginx/sites-enabled/$(ENVIRONMENT)
+# Link no-default
+RUN ln -s /etc/nginx/sites-available/no-default /etc/nginx/sites-enabled/no-default
 
-# Turn off nginx starting as a daemon
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+# Set the proper execution permission on the starting script
+RUN chmod +x /etc/nginx/start.sh
 
 # Define mountable directories.
 VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/var/log/nginx"]
@@ -102,7 +106,7 @@ VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/var/log/nginx"]
 # Define working directory.
 WORKDIR /etc/nginx
 
-# Define default command.
-CMD ["nginx"]
+# Run nginx
+CMD ./start.sh
 
 EXPOSE 443
