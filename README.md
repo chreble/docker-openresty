@@ -20,15 +20,23 @@ Custom OpenResty build with the following modules enabled:
 - http_spdy_module
 - pagespeed
 
-##### Build the image
+### How to use
+
+```bash
+# first auth on our private registry
+docker login https://docker.nexwai.pl # nexway/Nexway2015
+
+# pull the image
+docker pull n3-openresty
+
+# development, staging or production
+docker run -d -p 443:443 -e ENVIRONMENT=development --name openresty n3-openresty
+```
+
+### Development
+
+#### Build the image
 
 ```bash
 docker build -t n3-openresty .
-```
-
-##### Run the image
-
-```bash
-# development, staging or production
-docker run -e ENVIRONMENT=development --name test -i -t n3-openresty
 ```
