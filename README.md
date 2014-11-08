@@ -1,7 +1,9 @@
 Docker OpenResty for N3
 ===============
 
-Custom OpenResty build with the following modules enabled:
+Optimised and secured custom OpenResty build.
+
+The following modules enabled:
 
 - luajit
 - pcre-jit
@@ -29,14 +31,23 @@ docker login https://docker.nexwai.pl # nexway/Nexway2015
 # pull the image
 docker pull n3-openresty
 
-# development, staging or production
-docker run -d -p 443:443 --name openresty n3-openresty
+# run the container & mount the volumes
+docker run -d -p 443:443 \
+    -v /etc/nexway/nginx/sites-enabled:/etc/nginx/sites-enabled \
+    -v /etc/nexway/nginx/certs:/etc/nginx/certs \
+    -v /etc/nexway/nginx/logs:/var/log/nginx \
+    --name openresty \
+    n3-openresty
 ```
 
 ### Development
 
-#### Build the image
+#### Update the image
 
 ```bash
-docker build -t n3-openresty .
+# rebuild it
+docker build -t nexway/n3-openresty .
+
+# push it!
+docker push docker.nexwai.pl/n3-openresty
 ```
