@@ -107,6 +107,6 @@ VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/var/log/nginx"]
 WORKDIR /etc/nginx
 
 # Run nginx
-CMD ./start.sh
+CMD ["nginx"]
 
 EXPOSE 443

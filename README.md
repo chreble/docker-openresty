@@ -30,7 +30,7 @@ docker login https://docker.nexwai.pl # nexway/Nexway2015
 docker pull n3-openresty
 
 # development, staging or production
-docker run -d -p 443:443 -e ENVIRONMENT=development --name openresty n3-openresty
+docker run -d -p 443:443 --name openresty n3-openresty
 ```
 
 ### Development
