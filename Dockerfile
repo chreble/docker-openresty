@@ -96,9 +96,6 @@ RUN mkdir /var/ngx_pagespeed_cache \
 # Copy our custom configuration
 ADD nginx /etc/nginx/
 
-# Link no-default
-RUN ln -s /etc/nginx/sites-available/no-default /etc/nginx/sites-enabled/no-default
-
 # Set the proper execution permission on the starting script
 RUN chmod +x /etc/nginx/start.sh
 
