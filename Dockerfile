@@ -81,10 +81,12 @@ RUN rm -Rf /tmp/* \
     && apt-get autoremove -yqq \
     && apt-get clean all
 
-# Create folders required by nginx
-RUN mkdir -p /var/lib/nginx/proxy \
-    && mkdir -p /var/lib/nginx/body \
-    && mkdir -p /var/lib/nginx/fastcgi \
+# Create folders required by nginx & set proper permissions
+RUN mkdir /var/lib/nginx 
+    && chown -R www-data:www-data /var/lib/nginx \
+    && mkdir /var/lib/nginx/proxy \
+    && mkdir /var/lib/nginx/body \
+    && mkdir /var/lib/nginx/fastcgi \
     && chmod 777 /var/log/nginx
 
 # Add full write permissions to the pagespeed cache folder
