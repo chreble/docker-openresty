@@ -24,8 +24,9 @@ RUN apt-get update -qq \
 RUN (wget -qO - https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}.tar.gz | tar zxf - -C /tmp) \
     && (wget -qO - https://dl.google.com/dl/page-speed/psol/${PAGESPEED_PSOL_VERSION}.tar.gz | tar zxf - -C /tmp/ngx_pagespeed-${PAGESPEED_VERSION}/) \
     && (wget -qO - http://openresty.org/download/ngx_openresty-${OPENRESTY_VERSION}.tar.gz | tar zxf - -C /tmp) \
-    && (wget -qO - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar zxf - -C /tmp) \
-    && cd /tmp/ngx_openresty-${OPENRESTY_VERSION} \
+    && (wget -qO - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar zxf - -C /tmp)
+
+RUN cd /tmp/ngx_openresty-${OPENRESTY_VERSION} \
     && ./configure --prefix=/usr/share/nginx \
         --user=www-data \
         --group=www-data \
