@@ -1,5 +1,0 @@
-# Drop requests for unknown hosts
-server {
-  listen 443 default_server;
-  return 444;
-}
