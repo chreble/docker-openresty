@@ -45,6 +45,9 @@ docker run -d -p 443:443 \
 #### Update the image
 
 ```bash
+# first auth on our private registry
+docker login https://docker.nexwai.pl # nexway/Nexway2015
+
 # rebuild it
 docker build -t nexway/n3-openresty .
 
