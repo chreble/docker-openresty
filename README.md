@@ -1,9 +1,10 @@
-Docker OpenResty for N3
+Dockerized OpenResty
 ===============
 
-Optimised and secured custom OpenResty build.
+Optimised and secured SSL-only OpenResty build.
+The configuration [follows best practices](https://github.com/h5bp/server-configs-nginx/) in performance and security.
 
-The following modules enabled:
+The following modules are enabled:
 
 - luajit
 - pcre-jit
@@ -25,32 +26,11 @@ The following modules enabled:
 ### How to use
 
 ```bash
-# first auth on our private registry
-docker login https://docker.nexwai.pl # nexway/Nexway2015
-
-# pull the image
-docker pull n3-openresty
-
 # run the container & mount the volumes
 docker run -d -p 443:443 \
-    -v /etc/nexway/nginx/sites-enabled:/etc/nginx/sites-enabled \
-    -v /etc/nexway/nginx/certs:/etc/nginx/certs \
-    -v /etc/nexway/nginx/logs:/var/log/nginx \
+    -v /etc/nginx/sites-enabled:/etc/nginx/sites-enabled \
+    -v /etc/nginx/certs:/etc/nginx/certs \
+    -v /etc/nginx/logs:/var/log/nginx \
     --name openresty \
-    n3-openresty
-```
-
-### Development
-
-#### Update the image
-
-```bash
-# first auth on our private registry
-docker login https://docker.nexwai.pl # nexway/Nexway2015
-
-# rebuild it
-docker build -t nexway/n3-openresty .
-
-# push it!
-docker push docker.nexwai.pl/n3-openresty
+    jgautheron/openresty
 ```

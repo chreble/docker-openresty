@@ -1,5 +1,5 @@
 FROM phusion/baseimage
-MAINTAINER Jonathan Gautheron "jgautheron@nexway.com"
+MAINTAINER Jonathan Gautheron "jgautheron@tenwa.pl"
 
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
@@ -83,7 +83,7 @@ RUN rm -Rf /tmp/* \
     && apt-get clean all
 
 # Create folders required by nginx & set proper permissions
-RUN mkdir /var/lib/nginx 
+RUN mkdir /var/lib/nginx
     && chown -R www-data:www-data /var/lib/nginx \
     && mkdir /var/lib/nginx/proxy \
     && mkdir /var/lib/nginx/body \
@@ -96,9 +96,6 @@ RUN mkdir /var/ngx_pagespeed_cache \
 
 # Copy our custom configuration
 ADD nginx /etc/nginx/
-
-# Set the proper execution permission on the starting script
-RUN chmod +x /etc/nginx/start.sh
 
 # Define mountable directories.
 VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/var/log/nginx"]
