@@ -37,6 +37,7 @@ The following modules are enabled:
 ### How to use
 
 ##### Configure your vhost
+
 ```nginx
 server {
   listen [::]:443 ssl spdy;
