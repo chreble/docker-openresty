@@ -10,10 +10,6 @@ ENV PAGESPEED_VERSION 1.9.32.2-beta
 ENV PAGESPEED_PSOL_VERSION 1.9.32.2
 ENV OPENSSL_VERSION 1.0.1j
 
-# Default environment
-# Can be overridden at runtime using -e ENVIRONMENT=...
-ENV ENVIRONMENT development
-
 # Fix locales
 RUN locale-gen en_US.UTF-8 \
     && dpkg-reconfigure locales
@@ -83,7 +79,7 @@ RUN rm -Rf /tmp/* \
     && apt-get clean all
 
 # Create folders required by nginx & set proper permissions
-RUN mkdir /var/lib/nginx
+RUN mkdir /var/lib/nginx \
     && chown -R www-data:www-data /var/lib/nginx \
     && mkdir /var/lib/nginx/proxy \
     && mkdir /var/lib/nginx/body \
