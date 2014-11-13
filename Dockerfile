@@ -10,9 +10,12 @@ ENV PAGESPEED_VERSION 1.9.32.2-beta
 ENV PAGESPEED_PSOL_VERSION 1.9.32.2
 ENV OPENSSL_VERSION 1.0.1j
 
+# Default environment
+# Can be overridden at runtime using -e ENVIRONMENT=...
+ENV ENVIRONMENT development
+
 # Fix locales
-RUN locale-gen en_US.UTF-8 \
-    && dpkg-reconfigure locales
+RUN locale-gen en_US.UTF-8
 
 RUN apt-get update -qq \
     && apt-get install -yqq build-essential zlib1g-dev libpcre3 libpcre3-dev openssl libssl-dev libperl-dev wget ca-certificates libreadline-dev libncurses5-dev iputils-arping libexpat1-dev wget perl make
