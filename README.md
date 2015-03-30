@@ -64,6 +64,7 @@ server {
 docker run -d -p 443:443 \
     -v /etc/nginx/sites-enabled:/etc/nginx/sites-enabled \
     -v /etc/nginx/certs:/etc/nginx/certs \
+    -v /etc/nginx/conf:/etc/nginx/conf \
     -v /etc/nginx/logs:/var/log/nginx \
     --name openresty \
     jgautheron/openresty
