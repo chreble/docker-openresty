@@ -1,7 +1,6 @@
-FROM phusion/baseimage
+FROM google/debian:wheezy
 MAINTAINER Jonathan Gautheron "jgautheron@tenwa.pl"
 
-ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 
 # Define versions
@@ -9,21 +8,22 @@ ENV OPENRESTY_VERSION 1.7.10.1
 ENV PAGESPEED_VERSION 1.9.32.3-beta
 ENV PAGESPEED_PSOL_VERSION 1.9.32.3
 ENV OPENSSL_VERSION 1.0.2a
+ENV PCRE_VERSION 8.36
+ENV ZLIB_VERSION 1.2.8
 
 # Default environment
 # Can be overridden at runtime using -e ENVIRONMENT=...
 ENV ENVIRONMENT development
 
-# Fix locales
-RUN locale-gen en_US.UTF-8
-
 RUN apt-get update -qq \
-    && apt-get install -yqq build-essential zlib1g-dev libpcre3 libpcre3-dev openssl libssl-dev libperl-dev wget ca-certificates libreadline-dev libncurses5-dev iputils-arping libexpat1-dev wget perl make
+    && apt-get install -yqq build-essential wget ca-certificates
 
 RUN (wget -qO - https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}.tar.gz | tar zxf - -C /tmp) \
     && (wget --no-check-certificate -qO - https://dl.google.com/dl/page-speed/psol/${PAGESPEED_PSOL_VERSION}.tar.gz | tar zxf - -C /tmp/ngx_pagespeed-${PAGESPEED_VERSION}/) \
     && (wget -qO - http://openresty.org/download/ngx_openresty-${OPENRESTY_VERSION}.tar.gz | tar zxf - -C /tmp) \
-    && (wget -qO - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar zxf - -C /tmp)
+    && (wget -qO - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar zxf - -C /tmp) \
+    && (wget -qO - ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz | tar zxf - -C /tmp) \
+    && (wget -qO - http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz | tar zxf - -C /tmp)
 
 RUN cd /tmp/ngx_openresty-${OPENRESTY_VERSION} \
     && ./configure --prefix=/usr/share/nginx \
@@ -42,6 +42,8 @@ RUN cd /tmp/ngx_openresty-${OPENRESTY_VERSION} \
         --with-ipv6 \
         --with-http_ssl_module \
         --with-http_spdy_module \
+        --with-pcre=/tmp/pcre-${PCRE_VERSION} \
+        --with-zlib=/tmp/zlib-${ZLIB_VERSION} \
         --with-openssl=/tmp/openssl-${OPENSSL_VERSION} \
         --with-md5=/tmp/openssl-${OPENSSL_VERSION} \
         --with-md5-asm \
@@ -78,7 +80,7 @@ RUN cd /tmp/ngx_openresty-${OPENRESTY_VERSION} \
 
 # Cleanup
 RUN rm -Rf /tmp/* \
-    && apt-get purge -yqq wget build-essential \
+    && apt-get purge -yqq build-essential wget ca-certificates \
     && apt-get autoremove -yqq \
     && apt-get clean all
 
@@ -98,7 +100,7 @@ RUN mkdir /var/ngx_pagespeed_cache \
 ADD nginx /etc/nginx/
 
 # Define mountable directories.
-VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/var/log/nginx"]
+VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf", "/var/log/nginx"]
 
 # Define working directory.
 WORKDIR /etc/nginx
