@@ -5,10 +5,10 @@ ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 
 # Define versions
-ENV OPENRESTY_VERSION 1.7.4.1
-ENV PAGESPEED_VERSION 1.9.32.2-beta
-ENV PAGESPEED_PSOL_VERSION 1.9.32.2
-ENV OPENSSL_VERSION 1.0.1j
+ENV OPENRESTY_VERSION 1.7.10.1
+ENV PAGESPEED_VERSION 1.9.32.3-beta
+ENV PAGESPEED_PSOL_VERSION 1.9.32.3
+ENV OPENSSL_VERSION 1.0.2a
 
 # Default environment
 # Can be overridden at runtime using -e ENVIRONMENT=...
@@ -21,7 +21,7 @@ RUN apt-get update -qq \
     && apt-get install -yqq build-essential zlib1g-dev libpcre3 libpcre3-dev openssl libssl-dev libperl-dev wget ca-certificates libreadline-dev libncurses5-dev iputils-arping libexpat1-dev wget perl make
 
 RUN (wget -qO - https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}.tar.gz | tar zxf - -C /tmp) \
-    && (wget -qO - https://dl.google.com/dl/page-speed/psol/${PAGESPEED_PSOL_VERSION}.tar.gz | tar zxf - -C /tmp/ngx_pagespeed-${PAGESPEED_VERSION}/) \
+    && (wget --no-check-certificate -qO - https://dl.google.com/dl/page-speed/psol/${PAGESPEED_PSOL_VERSION}.tar.gz | tar zxf - -C /tmp/ngx_pagespeed-${PAGESPEED_VERSION}/) \
     && (wget -qO - http://openresty.org/download/ngx_openresty-${OPENRESTY_VERSION}.tar.gz | tar zxf - -C /tmp) \
     && (wget -qO - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar zxf - -C /tmp)
 
@@ -71,6 +71,7 @@ RUN cd /tmp/ngx_openresty-${OPENRESTY_VERSION} \
         --without-mail_imap_module \
         --without-mail_smtp_module \
         --without-http_encrypted_session_module \
+        --without-lua_resty_memcached \
         --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION} \
     && make \
     && make install
