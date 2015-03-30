@@ -6,7 +6,7 @@ The configuration [follows best practices](https://github.com/h5bp/server-config
 
 ##### Features
 
-- Uses latest OpenSSL 1.01j
+- Uses latest OpenSSL 1.0.2a
 - Allows only the TLSv1 TLSv1.1 TLSv1.2 protocols ([see SSLv3 Poodle Vulnerability](https://www.us-cert.gov/ncas/alerts/TA14-290A))
 - Server signature hidden (`Server` header removed)
 - Additional headers (`X-Frame-Options`, `X-XSS-Protection`, `Strict-Transport-Security`)
